@@ -14,7 +14,7 @@ Android 是 BLE Central/GATT Client，ESP32 是 BLE Peripheral/GATT Server。And
 ## Navigation message
 
 ```json
-{"v":1,"seq":42,"state":"active","man":"right","dist":300,"road":"人民路"}
+{"v":1,"seq":42,"state":"active","man":"right","dist":300,"remain":8600,"duration":1080,"eta":"14:30","speed":36,"limit":60,"road":"人民路"}
 ```
 
 - `v`：协议版本，固定为 `1`。
@@ -22,6 +22,11 @@ Android 是 BLE Central/GATT Client，ESP32 是 BLE Peripheral/GATT Server。And
 - `state`：当前固定为 `active`，为后续暂停/结束状态预留。
 - `man`：`straight`、`left`、`right`、`slight_left`、`slight_right`、`sharp_left`、`sharp_right`、`u_turn`、`roundabout`、`arrive`、`merge`、`exit` 或 `unknown`。
 - `dist`：可选，非负整数，单位米。
+- `remain`：可选，总剩余距离，单位米。
+- `duration`：可选，剩余时间，单位秒。
+- `eta`：可选，手机本地预计到达时间，格式 `HH:mm`。
+- `speed`：可选，当前速度，单位 km/h。
+- `limit`：可选，限速，单位 km/h。
 - `road`：可选，道路名称。
 - `raw`：仅动作无法识别时发送，内容为裁剪后的原始高德通知。
 

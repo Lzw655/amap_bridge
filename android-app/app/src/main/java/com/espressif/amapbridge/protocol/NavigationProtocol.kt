@@ -28,6 +28,11 @@ object NavigationProtocol {
                 put("state", state)
                 put("man", info.maneuver.wireValue)
                 info.distanceMeters?.let { put("dist", it) }
+                info.remainingDistanceMeters?.let { put("remain", it) }
+                info.remainingDurationSeconds?.let { put("duration", it) }
+                info.eta?.let { put("eta", it) }
+                info.currentSpeedKph?.let { put("speed", it) }
+                info.speedLimitKph?.let { put("limit", it) }
                 road?.let { value -> if (value.isNotEmpty()) put("road", value) }
                 raw?.let { value -> if (value.isNotEmpty()) put("raw", value) }
             }.toString()

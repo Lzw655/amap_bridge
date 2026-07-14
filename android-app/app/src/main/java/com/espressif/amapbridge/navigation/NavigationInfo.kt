@@ -22,4 +22,9 @@ data class NavigationInfo(
     val road: String? = null,
     val raw: String,
     val parsed: Boolean = maneuver != Maneuver.UNKNOWN,
+    val remainingDistanceMeters: Int? = null,
+    val remainingDurationSeconds: Int? = null,
+    val eta: String? = null,
+    val currentSpeedKph: Int? = null,
+    val speedLimitKph: Int? = null,
 )

@@ -1,0 +1,20 @@
+{
+  "cellSize": 128,
+  "columns": 4,
+  "icons": [
+    {"name":"straight","row":0,"column":0},
+    {"name":"left","row":0,"column":1},
+    {"name":"right","row":0,"column":2},
+    {"name":"slight_left","row":0,"column":3},
+    {"name":"slight_right","row":1,"column":0},
+    {"name":"sharp_left","row":1,"column":1},
+    {"name":"sharp_right","row":1,"column":2},
+    {"name":"u_turn","row":1,"column":3},
+    {"name":"roundabout","row":2,"column":0},
+    {"name":"arrive","row":2,"column":1},
+    {"name":"merge","row":2,"column":2},
+    {"name":"exit","row":2,"column":3},
+    {"name":"unknown","row":3,"column":0},
+    {"name":"route","row":3,"column":1}
+  ]
+}

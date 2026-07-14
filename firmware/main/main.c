@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include <assert.h>
 #include <inttypes.h>
 #include <string.h>
@@ -97,6 +103,11 @@ static void handle_navigation_json(const char *payload, size_t length)
     cJSON *state = cJSON_GetObjectItemCaseSensitive(root, "state");
     cJSON *maneuver = cJSON_GetObjectItemCaseSensitive(root, "man");
     cJSON *distance = cJSON_GetObjectItemCaseSensitive(root, "dist");
+    cJSON *remaining = cJSON_GetObjectItemCaseSensitive(root, "remain");
+    cJSON *duration = cJSON_GetObjectItemCaseSensitive(root, "duration");
+    cJSON *eta = cJSON_GetObjectItemCaseSensitive(root, "eta");
+    cJSON *speed = cJSON_GetObjectItemCaseSensitive(root, "speed");
+    cJSON *limit = cJSON_GetObjectItemCaseSensitive(root, "limit");
     cJSON *road = cJSON_GetObjectItemCaseSensitive(root, "road");
     cJSON *raw = cJSON_GetObjectItemCaseSensitive(root, "raw");
     int64_t seq = cJSON_IsNumber(sequence) ? (int64_t)sequence->valuedouble : 0;
@@ -121,10 +132,16 @@ static void handle_navigation_json(const char *payload, size_t length)
 
     ESP_LOGI(
         TAG,
-        "NAV #%" PRId64 " maneuver=%s distance=%d road=%s raw=%s",
+        "NAV #%" PRId64 " maneuver=%s distance=%d remain=%d duration=%d "
+        "eta=%s speed=%d limit=%d road=%s raw=%s",
         seq,
         maneuver->valuestring,
         cJSON_IsNumber(distance) ? distance->valueint : -1,
+        cJSON_IsNumber(remaining) ? remaining->valueint : -1,
+        cJSON_IsNumber(duration) ? duration->valueint : -1,
+        cJSON_IsString(eta) ? eta->valuestring : "-",
+        cJSON_IsNumber(speed) ? speed->valueint : -1,
+        cJSON_IsNumber(limit) ? limit->valueint : -1,
         cJSON_IsString(road) ? road->valuestring : "-",
         cJSON_IsString(raw) ? raw->valuestring : "-"
     );
