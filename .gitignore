@@ -1,0 +1,17 @@
+# Android / Gradle
+.gradle/
+**/build/
+android-app/local.properties
+*.iml
+.idea/
+
+# ESP-IDF
+firmware/build/
+firmware/sdkconfig
+firmware/sdkconfig.old
+firmware/managed_components/
+
+# Local files
+*.log
+.DS_Store
+Thumbs.db
