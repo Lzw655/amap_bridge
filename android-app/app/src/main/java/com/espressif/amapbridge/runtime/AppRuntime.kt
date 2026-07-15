@@ -44,6 +44,10 @@ object AppRuntime {
         }
     }
 
+    fun clearLogs() {
+        mutableState.update { it.copy(logs = emptyList()) }
+    }
+
     fun resetSession() {
         mutableState.update {
             it.copy(

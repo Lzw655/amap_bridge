@@ -101,6 +101,7 @@ class MainActivity : ComponentActivity() {
                     onScan = { sendServiceAction(BleProjectionService.ACTION_SCAN) },
                     onStop = { sendServiceAction(BleProjectionService.ACTION_STOP) },
                     onConnect = { sendServiceAction(BleProjectionService.ACTION_CONNECT, it) },
+                    onClearLogs = AppRuntime::clearLogs,
                 )
                 1 -> NavigationSimulatorScreen { AppRuntime.publishNavigation(it, "模拟导航") }
                 else -> Column(

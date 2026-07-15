@@ -1,5 +1,7 @@
 package com.espressif.amapbridge.ui
 
+import android.widget.Toast
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +22,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.espressif.amapbridge.runtime.AppUiState
@@ -36,7 +41,11 @@ fun ConnectionScreen(
     onScan: () -> Unit,
     onStop: () -> Unit,
     onConnect: (String) -> Unit,
+    onClearLogs: () -> Unit,
 ) {
+    val clipboardManager = LocalClipboardManager.current
+    val context = LocalContext.current
+
     LazyColumn(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -82,8 +91,38 @@ fun ConnectionScreen(
         item { NavigationDetailsCard(state) }
         item {
             SectionCard("诊断日志") {
-                if (state.logs.isEmpty()) Text("暂无日志", color = Color.Gray)
-                state.logs.take(20).forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("显示 ${minOf(state.logs.size, 20)} / ${state.logs.size} 条", color = Color.Gray)
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OutlinedButton(
+                            enabled = state.logs.isNotEmpty(),
+                            onClick = {
+                                clipboardManager.setText(AnnotatedString(state.logs.joinToString("\n")))
+                                Toast.makeText(context, "已复制 ${state.logs.size} 条日志", Toast.LENGTH_SHORT).show()
+                            },
+                        ) {
+                            Text("复制全部")
+                        }
+                        OutlinedButton(enabled = state.logs.isNotEmpty(), onClick = onClearLogs) {
+                            Text("清空")
+                        }
+                    }
+                }
+                if (state.logs.isEmpty()) {
+                    Text("暂无日志", color = Color.Gray)
+                } else {
+                    SelectionContainer {
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            state.logs.take(20).forEach {
+                                Text(it, style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+                }
             }
         }
         item { Spacer(Modifier.height(24.dp)) }

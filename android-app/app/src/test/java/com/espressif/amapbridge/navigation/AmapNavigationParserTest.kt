@@ -26,6 +26,43 @@ class AmapNavigationParserTest {
     }
 
     @Test
+    fun parsesRouteSummaryWithoutConfusingNextManeuverDistance() {
+        val result = parser.parse(
+            listOf(
+                "导航中",
+                "剩余8.6公里，18分钟，预计14:30到达",
+                "前方300米右转，进入人民路",
+            ),
+        )!!
+
+        assertEquals(Maneuver.RIGHT, result.maneuver)
+        assertEquals(300, result.distanceMeters)
+        assertEquals(8_600, result.remainingDistanceMeters)
+        assertEquals(1_080, result.remainingDurationSeconds)
+        assertEquals("14:30", result.eta)
+    }
+
+    @Test
+    fun parsesCompactSummaryWithHoursAndArrivalSuffix() {
+        val result = parser.parse(listOf("126公里 1小时25分钟 9:05到达", "继续直行"))!!
+
+        assertEquals(Maneuver.STRAIGHT, result.maneuver)
+        assertNull(result.distanceMeters)
+        assertEquals(126_000, result.remainingDistanceMeters)
+        assertEquals(5_100, result.remainingDurationSeconds)
+        assertEquals("09:05", result.eta)
+    }
+
+    @Test
+    fun leavesUnavailableRouteSummaryFieldsEmpty() {
+        val result = parser.parse(listOf("前方300米右转，进入人民路"))!!
+
+        assertNull(result.remainingDistanceMeters)
+        assertNull(result.remainingDurationSeconds)
+        assertNull(result.eta)
+    }
+
+    @Test
     fun recognizesEverySupportedManeuver() {
         val cases = mapOf(
             "继续直行" to Maneuver.STRAIGHT,
